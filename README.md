@@ -1,4 +1,4 @@
-# 2019-coronavirus-analysis
+# 2019 Coronavirus Distribution Visualization
 
 
 ## Step1.Install package and load data from github
