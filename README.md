@@ -5,17 +5,20 @@
 # Step1.Install package and load data from github
 
 # Step2. Package structure exploration 
-  <img src="images/1%20package%2structure.png" width="60%">
+  <img src="images/1%20package%2structure.png">
 
 
 # Step3.EDA, Data visualization on main epidemic areas
+
 * Global Data, all countries
+
   <img src="images/2%20Global%20Data.png" width="60%">
   
   <img src="images/9%20worldmap%20with%20China%20breakdown.png" width="60%">
 
 
 * China Data, all provinces
+
   <img src="images/3%20China%20Data.png" width="60%">
   
   <img src="images/10%20china%20map.png" width="60%">
@@ -49,4 +52,5 @@
 
 # Time series prediction
   <img src="images/13 exponential smoothing TS.png" width="60%">
+  
   <img src="images/14 Forecast from HoltWinters.png" width="60%">
