@@ -5,6 +5,7 @@
 # Step1.Install package and load data from github
 
 # Step2. Package structure exploration 
+
   <img src="images/1%20package%2structure.png">
 
 
@@ -20,6 +21,7 @@
 * China Data, all provinces
 
   <img src="images/3%20China%20Data.png" width="60%">
+  
   
   <img src="images/10%20china%20map.png" width="60%">
 
