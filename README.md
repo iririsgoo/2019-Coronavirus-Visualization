@@ -11,11 +11,13 @@
 # Step3.EDA, Data visualization on main epidemic areas
 Global Data, all countries
   <img src="images/2%20Global%20Data.png" width="60%">
+  
   <img src="images/9%20worldmap%20with%20China%20breakdown.png" width="60%">
 
 
 China Data, all provinces
   <img src="images/3%20China%20Data.png" width="60%">
+  
   <img src="images/10%20china%20map.png" width="60%">
 
 
@@ -24,7 +26,8 @@ Number of confirmed cases(global)
 
 Confirmed cases in Hubei Province, where the epidemic is the most severe
     <img src="images/4%20most%20severe%20province.png" width="60%">
-    <img src="images/7%20confirmed cases%20in%20Huber%20provinces.png" width="60%">
+    
+    <img src="images/7%20confirmed%20cases%20in%20Huber%20provinces.png" width="60%">
  
 Confirmed cases in Wuhan, the city where the epidemic is the most severe
    <img src="images/5%20most%20severe%20city.png" width="60%">
