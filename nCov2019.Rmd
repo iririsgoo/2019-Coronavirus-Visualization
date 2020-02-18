@@ -1,0 +1,247 @@
+---
+title: "2019 nCov"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## R Markdown
+### Package exploration
+```{r}
+#install.packages("remotes")
+#remotes::install_github("GuangchuangYu/nCov2019")
+library(remotes)
+library(nCov2019)
+```
+## Part1. The latest data
+```{r}
+x1 <- get_nCov2019(lang='en')
+x1$lastUpdateTime
+```
+
+```{r}
+# Global Data, all countries
+x1['global',]
+```
+
+# Exolore the structure of the package
+```{r}
+library(DataExplorer)
+plot_str(x1)
+```
+
+# Daily newly added cases in China
+```{r}
+x1$chinaAdd
+```
+
+# Total cases in China until the last update.
+```{r}
+x1$chinaTotal
+```
+
+```{r}
+# China data by province
+x1[]
+# Global data
+x1['global']
+names(x1$chinaDayList)
+```
+# EDA:
+
+```{r}
+#Provincial & City Data in China
+x1[]
+
+```
+
+```{r}
+#see the cases within the Hubei province, 
+x1['Hubei',] 
+```
+
+```{r}
+library(forcats)
+library(ggplot2)
+
+# China confirmed cases breakdown by province
+ggplot(x1[], aes(name, confirm)) + 
+  geom_col(fill='steelblue') + coord_flip() +
+  geom_text(aes(y = confirm+2, label=confirm), hjust=0) +
+  theme_minimal(base_size=14) + 
+  scale_y_continuous(expand=c(0,10)) +
+  xlab(NULL) + ylab(NULL)
+
+# Visualization for Hubei，the main epidemic area
+d1 = x1['Hubei',] # replace Anhui with any province
+d1$confirm=as.numeric(d1$confirm)
+d1$name = fct_reorder(d1$name, d1$confirm)
+ggplot(d1, aes(name, confirm)) + 
+  geom_col(fill='steelblue') + coord_flip() +
+  geom_text(aes(y = confirm+2, label=confirm), hjust=0) +
+  theme_minimal(base_size=14) + 
+  scale_y_continuous(expand=c(0,10)) +
+  xlab(NULL) + ylab(NULL)
+
+#Daily Data, viewing the number of newly added cases
+head(x1[by='today'], 10)
+
+#Provincial data, replace Hubei with any province
+x1['Hubei', by='today'] 
+
+```
+
+```{r}
+summary(x1)
+summary(x1, by='today')
+```
+
+```{r}
+library(ggplot2)
+# No.confirmed cases, global sum.
+ggplot(summary(x1), aes(as.Date(date, "%m.%d"), as.numeric(confirm))) + geom_col(fill='firebrick') + theme_minimal(base_size = 14) + xlab(NULL) + ylab(NULL) + labs(caption = paste("accessed date:",time(x)))
+
+# Why was there a sudden jump on Feb 12? because the official definition of "confirmed cases' changed on Feb.12.
+```
+
+# Part2. Historical data
+
+```{r}
+x2 <- load_nCov2019(lang='en')
+x2
+```
+
+```{r}
+# All provincial data
+head(x2['Hubei',c(1:6, 9:11)])
+```
+
+```{r}
+# City specific data
+head(subset(x2['Hubei',], city == "Wuhan"))[c(1:6, 9:11)]
+
+```
+
+```{r}
+# Data visualization of confirmed cases by city of each province
+library(ggplot2)
+require(ggrepel)
+# Confirmed cases in each city of Hubei Province
+d2 <- x2['Hubei',] 
+ggplot(d2, aes(time, as.numeric(cum_confirm), group=city, color=city)) +
+  geom_point() + geom_line() +
+  geom_text_repel(aes(label=city), data=d[d$time == time(x), ], hjust=1) +
+  theme_minimal(base_size = 14) + theme(legend.position='none') +
+  xlab(NULL) + ylab(NULL)
+
+
+```
+
+```{r}
+# Summary Results of China
+head(summary(x2)[,1:5])
+```
+
+```{r}
+summary(x, 'Hubei')[,1:5]
+```
+
+
+```{r}
+# confirmed cases over time for province Huber
+ggplot(summary(x, 'Hubei'), aes(time, as.numeric(cum_confirm))) + geom_col()
+
+# confirmed cases over time for city Wuhan
+ggplot(subset(x['Hubei',], city == "Wuhan"), aes(time, as.numeric(cum_confirm))) + geom_col()
+```
+# Part 3: Map Plotting
+```{r}
+plot(x1)
+```
+
+
+```{r}
+#remotes::install_github("GuangchuangYu/chinamap")
+require(chinamap)
+cn = get_map_china()
+## translate province 
+cn$province <- trans_province(cn$province)
+plot(x1, chinamap=cn)
+```
+
+```{r}
+# Get a closer look at China
+plot(x1, region='china', chinamap=cn, font.size=2)
+```
+
+```{r}
+x1$chinaDayList
+```
+
+```{r}
+ggplot(x1$dailyNewAddHistory,
+       aes(as.Date(date, "%m.%d"),
+           as.numeric(country)))  + geom_line()
+# There is a sudden increase because the official definition of "confirmed cases' changed at Feb.12
+```
+
+```{r}
+ConfirmOld <-cbind(x1$chinaDayAddList["date"],x1$chinaDayAddList["confirm"]) 
+ConfirmOld$new <- ConfirmOld$confirm
+#Under former standard，the newly confirmed cases would have been 1508 and 1998 on Feb12 and Feb13
+ConfirmOld$new[24:25] <- c(1508,1998) 
+
+# What is the real increase in confirmed cases?
+ggplot(ConfirmOld,
+       aes(as.Date(date, "%m.%d")))  +
+  geom_line(aes(y=ConfirmOld$confirm), color = "grey") +
+  geom_line(aes(y=ConfirmOld$new), color = "red") +
+  geom_point(aes(y=ConfirmOld$confirm),color = "grey" ) +
+  geom_point(aes(y=ConfirmOld$new), color = "red" )
+```
+
+# Time series prediction
+```{r}
+library(forecast)
+adjusted <-subset(ConfirmOld, select=c('new'))
+case <- ts(adjusted)
+plot.ts(case)
+forecast <- HoltWinters(case, beta=FALSE, gamma=FALSE)
+
+```
+
+```{r}
+forecast_6 <- forecast:::forecast.HoltWinters(forecast, h=6)
+plot(forecast_6)
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
