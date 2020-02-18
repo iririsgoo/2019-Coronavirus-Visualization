@@ -1,15 +1,17 @@
 # 2019-coronavirus-analysis
 
+
+## Step1.Install package and load data from github
+
 * Data: the nCov2019 package by Guangchuang Yu [link](https://github.com/GuangchuangYu/nCov2019)
 
-# Step1.Install package and load data from github
 
-# Step2. Package structure exploration 
+## Step2. Package structure exploration 
 
   <img src="images/1%20package%20structure.png">
 
 
-# Step3.EDA, Data visualization on main epidemic areas
+## Step3.EDA, Data visualization on main epidemic areas
 
 * Global Data, all countries
 
@@ -52,7 +54,7 @@
   <img src="images/12%20(actual)%20confirmed%20cases%20over%20time.png" width="60%">
 
 
-# Time series prediction
+## Step4. Time series prediction
   <img src="images/13 exponential smoothing TS.png" width="60%">
   
   <img src="images/14 Forecast from HoltWinters.png" width="60%">
